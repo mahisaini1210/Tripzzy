@@ -1,0 +1,141 @@
+<!-- <!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Marker</title>
+    The callback parameter is required, so we use console.debug as a noop
+    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyArUXM7qXmwnqUQFq-xmWJeyRccYW88Up0&callback=console.debug&libraries=maps,marker&v=beta">
+    </script>
+    <style> -->
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      /* gmp-map {
+        height: 100%;
+      } */
+
+      /* Optional: Makes the sample page fill the window. */
+      /* html, */
+      /* body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      } */
+    /* </style> */
+  <!-- </head> -->
+  <!-- <body> -->
+    <!-- <gmp-map center="40.12150192260742,-100.45039367675781" zoom="4" map-id="DEMO_MAP_ID"> -->
+      <!-- <gmp-advanced-marker position="40.12150192260742,-100.45039367675781" title="My location"></gmp-advanced-marker> -->
+    <!-- </gmp-map> -->
+  <!-- </body> -->
+<!-- </html> -->
+
+<!-- <!DOCTYPE html> -->
+<!-- <html> -->
+  <!-- <head> -->
+    <!-- <title> -->
+      <!-- Simple Places Autocomplete -->
+    <!-- </title> -->
+    <!-- <script type="module" src="https://ajax.googleapis.com/ajax/libs/@googlemaps/extended-component-library/0.6.11/index.min.js"> -->
+    // </script>
+    <!-- <style>
+      body {
+        padding: 25px;
+        background-color: #f0f1f3;
+        font-family: "Arial", sans-serif;
+      }
+
+      #place-picker-box {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      #place-picker-container {
+        text-align: left;
+      } -->
+    /* </style> */
+  <!-- </head> -->
+  <!-- <body> -->
+    <!-- <gmpx-api-loader key="AIzaSyArUXM7qXmwnqUQFq-xmWJeyRccYW88Up0" solution-channel="GMP_GE_placepicker_v2"> -->
+    <!-- </gmpx-api-loader> -->
+    <!-- <div id="place-picker-box"> -->
+      <!-- <div id="place-picker-container"> -->
+        <!-- <gmpx-place-picker placeholder="Enter an address"></gmpx-place-picker> -->
+      <!-- </div> -->
+    <!-- </div> -->
+  <!-- </body> -->
+<!-- </html> -->
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Maps and Places Autocomplete</title>
+    <script>
+      async function init() {
+        await customElements.whenDefined('gmp-map');
+
+        const map = document.querySelector('gmp-map');
+        const marker = document.querySelector('gmp-advanced-marker');
+        const placePicker = document.querySelector('gmpx-place-picker');
+        const infowindow = new google.maps.InfoWindow();
+
+        map.innerMap.setOptions({
+          mapTypeControl: false
+        });
+
+        placePicker.addEventListener('gmpx-placechange', () => {
+          const place = placePicker.value;
+
+          if (!place.location) {
+            window.alert(
+              "No details available for input: '" + place.name + "'"
+            );
+            infowindow.close();
+            marker.position = null;
+            return;
+          }
+
+          if (place.viewport) {
+            map.innerMap.fitBounds(place.viewport);
+          } else {
+            map.center = place.location;
+            map.zoom = 17;
+          }
+
+          marker.position = place.location;
+          infowindow.setContent(
+            `<strong>${place.displayName}</strong><br>
+             <span>${place.formattedAddress}</span>
+          `);
+          infowindow.open(map.innerMap, marker);
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', init);
+    </script>
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/@googlemaps/extended-component-library/0.6.11/index.min.js">
+    </script>
+    <style>
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      .place-picker-container {
+        padding: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <gmpx-api-loader key="AIzaSyArUXM7qXmwnqUQFq-xmWJeyRccYW88Up0" solution-channel="GMP_GE_mapsandplacesautocomplete_v2">
+    </gmpx-api-loader>
+    <gmp-map center="40.749933,-73.98633" zoom="13" map-id="DEMO_MAP_ID">
+      <div slot="control-block-start-inline-start" class="place-picker-container">
+        <gmpx-place-picker placeholder="Enter an address"></gmpx-place-picker>
+      </div>
+      <gmp-advanced-marker></gmp-advanced-marker>
+    </gmp-map>
+  </body>
+</html>
